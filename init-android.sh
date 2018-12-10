@@ -6,14 +6,28 @@
 # Copyright (C) 2018 yuqilin <iyuqilin@foxmail.com>
 #
 
-SCRIPT_DIR=$(cd "$(dirname "$0")"; pwd)
-export FF_BUILD_ROOT=$SCRIPT_DIR/android/build
-export FF_OUTPUT_ROOT=$SCRIPT_DIR/android/output
+BASE_DIR=$(cd "$(dirname "$0")"; pwd)
+export FF_BUILD_ROOT=$BASE_DIR/android/build
+export FF_OUTPUT_ROOT=$BASE_DIR/android/output
+
+BUILD_ARCHS="armv7a arm64"
 
 FFMPEG_UPSTREAM=https://github.com/Bilibili/FFmpeg.git
-FFMPEG_REMOTE=https://github.com/yuqilin/FFmpeg.git
+FFMPEG_REMOTE=git@github.com:yuqilin/FFmpeg.git
 FFMPEG_COMMIT=ff3.4--ijk0.8.7--20180103--001
 FFMPEG_LOCAL_REPO=extra/ffmpeg
+
+LIBX264_REMOTE=git@github.com:yuqilin/libx264.git
+LIBX264_LOCAL_REPO=extra/libx264
+LIBX264_COMMIT=stable
+
+LIBMP3LAME_REMOTE=git@github.com:yuqilin/libmp3lame.git
+LIBMP3LAME_LOCAL_REPO=extra/libmp3lame
+LIBMP3LAME_COMMIT=
+
+LIBFDKAAC_REMOTE=git@github.com:yuqilin/fdk-aac.git
+LIBFDKAAC_LOCAL_REPO=extra/fdk-aac
+LIBFDKAAC_COMMIT=
 
 mkdir -p $FF_BUILD_ROOT
 
@@ -30,19 +44,50 @@ TOOLS=tools
 echo "== pull ffmpeg base =="
 sh $TOOLS/pull-repo-base.sh $FFMPEG_REMOTE $FFMPEG_LOCAL_REPO
 
-function pull_fork()
-{
+echo "== pull libx264 base =="
+sh $TOOLS/pull-repo-base.sh $LIBX264_REMOTE $LIBX264_LOCAL_REPO
+
+echo "== pull libmp3lame base =="
+sh $TOOLS/pull-repo-base.sh $LIBMP3LAME_REMOTE $LIBMP3LAME_LOCAL_REPO
+
+echo "== pull libfdkaac base =="
+sh $TOOLS/pull-repo-base.sh $LIBFDKAAC_REMOTE $LIBFDKAAC_LOCAL_REPO
+
+function spushd() {
+    pushd "$1" 2>&1> /dev/null
+}
+
+function spopd() {
+    popd 2>&1> /dev/null
+}
+
+function pull_fork() {
     ARCH=$1
+    
     echo "== pull ffmpeg fork $ARCH =="
     FFMPEG_ARCH_SRC=$FF_BUILD_ROOT/$ARCH/ffmpeg
-    sh $TOOLS/pull-repo-ref.sh ${FFMPEG_LOCAL_REPO} $FFMPEG_REMOTE $FFMPEG_ARCH_SRC
-    # sh $TOOLS/pull-repo-ref.sh $LIBX264_REMOTE android/contrib/libx264-$1 ${LIBX264_LOCAL}
-    cd $FFMPEG_ARCH_SRC
+    sh $TOOLS/pull-repo-ref.sh $FFMPEG_LOCAL_REPO $FFMPEG_REMOTE $FFMPEG_ARCH_SRC
+    spushd $FFMPEG_ARCH_SRC
     git checkout ${FFMPEG_COMMIT} -B qmediaplayer
-    cd -
-    # cd android/contrib/libx264-$1
-    # git checkout ${LIBX264_COMMIT}
-    # cd -
+    spopd
+
+    echo "== pull libx264 fork $ARCH =="
+    LIBX264_ARCH_SRC=$FF_BUILD_ROOT/$ARCH/libx264
+    sh $TOOLS/pull-repo-ref.sh $LIBX264_LOCAL_REPO $LIBX264_REMOTE $LIBX264_ARCH_SRC
+    spushd $LIBX264_ARCH_SRC
+    git checkout ${LIBX264_COMMIT}
+    spopd
+
+    # echo "== pull libmp3lame fork $ARCH =="
+    # LIBMP3LAME_ARCH_SRC=$FF_BUILD_ROOT/$ARCH/libmp3lame
+    # sh $TOOLS/pull-repo-ref.sh $LIBMP3LAME_LOCAL_REPO $LIBMP3LAME_REMOTE $LIBMP3LAME_ARCH_SRC
+
+    echo "== pull fdk-aac fork $ARCH =="
+    LIBFDKAAC_ARCH_SRC=$FF_BUILD_ROOT/$ARCH/fdk-aac
+    sh $TOOLS/pull-repo-ref.sh $LIBFDKAAC_LOCAL_REPO $LIBFDKAAC_REMOTE $LIBFDKAAC_ARCH_SRC
+    # spushd $LIBFDKAAC_ARCH_SRC
+    # git checkout ${LIBFDKAAC_COMMIT}
+    # spopd
 }
 
 for FF_ARCH in $BUILD_ARCHS; do
@@ -87,7 +132,3 @@ for FF_ARCH in $BUILD_ARCHS; do
     pull_fork $FF_ARCH
 done
 
-##############################
-# init config
-##############################
-./init-config.sh

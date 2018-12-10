@@ -63,13 +63,16 @@ FF_DEP_LIBX264_LIB=
 FF_DEP_LIBMP3LAME_INC=
 FF_DEP_LIBMP3LAME_LIB=
 
+FF_DEP_LIBFDKAAC_INC=
+FF_DEP_LIBFDKAAC_LIB=
+
 FF_CFG_FLAGS=
 
 FF_EXTRA_CFLAGS=
 FF_EXTRA_LDFLAGS=
 FF_DEP_LIBS=
 
-FF_MODULE_DIRS="compat libavcodec libavfilter libavformat libavutil libswresample libswscale libavresample libpostproc"
+FF_MODULE_DIRS="compat libavcodec libavdevice libavfilter libavformat libavresample libavutil libpostproc libswresample libswscale"
 FF_ASSEMBLER_SUB_DIRS=
 
 FF_MAKE_FLAGS=$IJK_MAKE_FLAG
@@ -81,6 +84,7 @@ FF_BUILD_NAME_OPENSSL=openssl
 FF_BUILD_NAME_LIBSOXR=libsoxr
 FF_BUILD_NAME_LIBX264=libx264
 FF_BUILD_NAME_LIBMP3LAME=lame
+FF_BUILD_NAME_LIBFDKAAC=fdk-aac
 
 FF_BUILD_ARCH=$FF_BUILD_ROOT/$FF_ARCH
 FF_SOURCE=$FF_BUILD_ARCH/$FF_BUILD_NAME
@@ -180,6 +184,12 @@ FF_DEP_LIBX264_LIB=$FF_ARCH_OUTPUT/$FF_BUILD_NAME_LIBX264/lib
 FF_DEP_LIBMP3LAME_INC=$FF_ARCH_OUTPUT/$FF_BUILD_NAME_LIBMP3LAME/include
 FF_DEP_LIBMP3LAME_LIB=$FF_ARCH_OUTPUT/$FF_BUILD_NAME_LIBMP3LAME/lib
 
+FF_DEP_LIBFDKAAC_INC=$FF_ARCH_OUTPUT/$FF_BUILD_NAME_LIBFDKAAC/include
+FF_DEP_LIBFDKAAC_LIB=$FF_ARCH_OUTPUT/$FF_BUILD_NAME_LIBFDKAAC/lib
+
+echo FF_DEP_LIBFDKAAC_INC=$FF_DEP_LIBFDKAAC_INC
+echo FF_DEP_LIBFDKAAC_LIB=$FF_DEP_LIBFDKAAC_LIB
+
 case "$UNAME_S" in
     CYGWIN_NT-*)
         FF_SYSROOT="$(cygpath -am $FF_SYSROOT)"
@@ -256,6 +266,13 @@ if [ -f "${FF_DEP_LIBMP3LAME_LIB}/libmp3lame.a" ]; then
     FF_DEP_LIBS="$FF_DEP_LIBS -L${FF_DEP_LIBMP3LAME_LIB} -lmp3lame"
 fi
 
+### libfdkaac
+if [ -f "${FF_DEP_LIBFDKAAC_LIB}/libfdk-aac.a" ]; then
+    echo "libfdkaac detected"
+    FF_CFLAGS="$FF_CFLAGS -I${FF_DEP_LIBFDKAAC_INC}"
+    FF_DEP_LIBS="$FF_DEP_LIBS -L${FF_DEP_LIBFDKAAC_LIB} -lfdk-aac"
+fi
+
 FF_CFG_FLAGS="$FF_CFG_FLAGS $COMMON_FF_CFG_FLAGS"
 
 #--------------------
@@ -298,15 +315,15 @@ echo "--------------------"
 echo "[*] configurate ffmpeg"
 echo "--------------------"
 cd $FF_SOURCE
-if [ -f "./config.h" ]; then
-    echo 'reuse configure'
-else
+# if [ -f "./config.h" ]; then
+#     echo 'reuse configure'
+# else
     which $CC
     ./configure $FF_CFG_FLAGS \
         --extra-cflags="$FF_CFLAGS $FF_EXTRA_CFLAGS" \
         --extra-ldflags="$FF_DEP_LIBS $FF_EXTRA_LDFLAGS"
     make clean
-fi
+# fi
 
 #--------------------
 echo ""
