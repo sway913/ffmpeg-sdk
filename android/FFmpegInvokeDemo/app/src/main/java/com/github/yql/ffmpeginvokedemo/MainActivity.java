@@ -90,9 +90,9 @@ public class MainActivity extends AppCompatActivity {
 //        Log.d(TAG, "ffmpegPath : " + ffmpegPath);
 //        FFmpegInvoke.help(ffmpegPath);
 
-        final String command = "ffmpeg -ss 0 -i /sdcard/test.mp4 -vframes 1 -y /sdcard/test.jpg";
+//        final String command = "ffmpeg -ss 0 -i /sdcard/test.mp4 -vframes 1 -y /sdcard/test.jpg";
 //        final String command = "ffmpeg -ss 0 -i /sdcard/test.mp4 -t 30 -vcodec copy -acodec copy -y /sdcard/test2.mp4";
-//        final String command = "ffmpeg -y -i /sdcard/test.mp4 -movflags faststart -b:v 200k  -vcodec libx264 -acodec libfdk_aac /sdcard/test3.mp4";
+        final String command = "ffmpeg -y -i /sdcard/test.mp4 -movflags faststart -b:v 200k -vcodec libx264 -acodec libfdk_aac /sdcard/test3.mp4";
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {

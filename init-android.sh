@@ -10,7 +10,7 @@ BASE_DIR=$(cd "$(dirname "$0")"; pwd)
 export FF_BUILD_ROOT=$BASE_DIR/android/build
 export FF_OUTPUT_ROOT=$BASE_DIR/android/output
 
-BUILD_ARCHS="armv7a arm64"
+BUILD_ARCHS="armv7a"
 
 FFMPEG_UPSTREAM=https://github.com/Bilibili/FFmpeg.git
 FFMPEG_REMOTE=git@github.com:yuqilin/FFmpeg.git
@@ -90,6 +90,7 @@ function pull_fork() {
     # spopd
 }
 
+FF_TOOLCHAIN_ARCH=arm
 for FF_ARCH in $BUILD_ARCHS; do
     
     ##############################
@@ -98,13 +99,17 @@ for FF_ARCH in $BUILD_ARCHS; do
 
     FF_CROSS_PREFIX=
     if [ "$FF_ARCH" = "armv7a" ]; then
+        FF_TOOLCHAIN_ARCH=arm
         FF_CROSS_PREFIX=arm-linux-androideabi
     elif [ "$FF_ARCH" = "arm64" ]; then
-        FF_CROSS_PREFIX=aarch64-linux-androideabi
+        FF_TOOLCHAIN_ARCH=arm64
+        FF_CROSS_PREFIX=aarch64-linux-android
         FF_ANDROID_PLATFORM=android-21
     elif [ "$FF_ARCH" = "x86" ]; then
+        FF_TOOLCHAIN_ARCH=x86
         FF_CROSS_PREFIX=x86-linux-android
     elif [ "$FF_ARCH" = "x86_64" ]; then
+        FF_TOOLCHAIN_ARCH=x86_64
         FF_CROSS_PREFIX=x86_64-linux-android
     fi
 
@@ -126,6 +131,7 @@ for FF_ARCH in $BUILD_ARCHS; do
             $FF_MAKE_TOOLCHAIN_FLAGS \
             --platform=$FF_ANDROID_PLATFORM \
             --toolchain=$FF_TOOLCHAIN_NAME
+                
         touch $FF_TOOLCHAIN_TOUCH;
     fi
 

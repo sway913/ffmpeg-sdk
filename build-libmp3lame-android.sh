@@ -19,10 +19,13 @@ cd $LAME_ROOT/jni
 $ANDROID_NDK/ndk-build V=1 NDK_PROJECT_PATH=. APP_BUILD_SCRIPT=./Android.mk NDK_APPLICATION_MK=./Application.mk clean
 $ANDROID_NDK/ndk-build V=1 NDK_PROJECT_PATH=. APP_BUILD_SCRIPT=./Android.mk NDK_APPLICATION_MK=./Application.mk LOCAL_ARM_MODE=arm
 
+# $ANDROID_NDK/ndk-build V=1 clean
+# $ANDROID_NDK/ndk-build V=1 LOCAL_ARM_MODE=arm
+
 HEADER_FILES=" \
     $LAME_ROOT/include/lame.h"
 
-ARCHS="armv7a arm64"
+ARCHS="armv7a"
 
 for ARCH in $ARCHS; do
     mkdir -p $FF_OUTPUT_ROOT/$ARCH/lame/include/lame
@@ -31,5 +34,6 @@ for ARCH in $ARCHS; do
 done
 
 # cp -a $LAME_ROOT/jni/obj/local/armeabi/libmp3lame.a $BUILD_ROOT/lame-armv5/lib
+
 cp -a $LAME_ROOT/jni/obj/local/armeabi-v7a/libmp3lame.a $FF_OUTPUT_ROOT/armv7a/lame/lib
-cp -a $LAME_ROOT/jni/obj/local/arm64-v8a/libmp3lame.a $FF_OUTPUT_ROOT/arm64/lame/lib
+# cp -a $LAME_ROOT/jni/obj/local/arm64-v8a/libmp3lame.a $FF_OUTPUT_ROOT/arm64/lame/lib

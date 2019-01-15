@@ -24,7 +24,7 @@ HEADER_FILES=" \
     $FDKAAC_ROOT/libSYS/include/genericStds.h \
     $FDKAAC_ROOT/libSYS/include/machine_type.h"
 
-ARCHS="armv7a arm64"
+ARCHS="armv7a"
 
 for ARCH in $ARCHS; do
     mkdir -p $OUTPUT_ROOT/$ARCH/fdk-aac/include/fdk-aac
@@ -32,7 +32,7 @@ for ARCH in $ARCHS; do
     cp -a $HEADER_FILES $OUTPUT_ROOT/$ARCH/fdk-aac/include/fdk-aac
 done
 
-# cp -a $FDKAAC_ROOT/obj/local/armeabi/libfdkaac.a $BUILD_ROOT/armeabi/install/lib
-cp -a $FDKAAC_ROOT/obj/local/armeabi-v7a/libfdkaac.a $OUTPUT_ROOT/armv7a/fdk-aac/lib
-cp -a $FDKAAC_ROOT/obj/local/arm64-v8a/libfdkaac.a $OUTPUT_ROOT/arm64/fdk-aac/lib
-
+# cp -a $FDKAAC_ROOT/obj/local/armeabi/libfdk-aac.a $BUILD_ROOT/armeabi/install/lib
+cp -a $FDKAAC_ROOT/obj/local/armeabi-v7a/libfdk-aac.a $OUTPUT_ROOT/armv7a/fdk-aac/lib
+# cp -a $FDKAAC_ROOT/obj/local/arm64-v8a/libfdk-aac.a $OUTPUT_ROOT/arm64/fdk-aac/lib
+# 
