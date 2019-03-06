@@ -13,19 +13,19 @@ export FF_OUTPUT_ROOT=$BASE_DIR/android/output
 BUILD_ARCHS="armv7a"
 
 FFMPEG_UPSTREAM=https://github.com/Bilibili/FFmpeg.git
-FFMPEG_REMOTE=git@github.com:yuqilin/FFmpeg.git
+FFMPEG_REMOTE=https://github.com/yuqilin/FFmpeg.git
 FFMPEG_COMMIT=ff3.4--ijk0.8.7--20180103--001
 FFMPEG_LOCAL_REPO=extra/ffmpeg
 
-LIBX264_REMOTE=git@github.com:yuqilin/libx264.git
+LIBX264_REMOTE=https://github.com/yuqilin/libx264.git
 LIBX264_LOCAL_REPO=extra/libx264
 LIBX264_COMMIT=stable
 
-LIBMP3LAME_REMOTE=git@github.com:yuqilin/libmp3lame.git
+LIBMP3LAME_REMOTE=https://github.com/yuqilin/libmp3lame.git
 LIBMP3LAME_LOCAL_REPO=extra/libmp3lame
 LIBMP3LAME_COMMIT=
 
-LIBFDKAAC_REMOTE=git@github.com:yuqilin/fdk-aac.git
+LIBFDKAAC_REMOTE=https://github.com/yuqilin/fdk-aac.git
 LIBFDKAAC_LOCAL_REPO=extra/fdk-aac
 LIBFDKAAC_COMMIT=
 
