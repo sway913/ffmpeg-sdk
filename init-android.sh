@@ -1,7 +1,7 @@
 #! /bin/sh
 #
 # init-android.sh
-# 
+#
 # Created by yuqilin on 11/26/2018
 # Copyright (C) 2018 yuqilin <iyuqilin@foxmail.com>
 #
@@ -14,7 +14,7 @@ BUILD_ARCHS="armv7a"
 
 FFMPEG_UPSTREAM=https://github.com/Bilibili/FFmpeg.git
 FFMPEG_REMOTE=https://github.com/yuqilin/FFmpeg.git
-FFMPEG_COMMIT=ff3.4--ijk0.8.7--20180103--001
+FFMPEG_COMMIT=origin/qmediaplayer
 FFMPEG_LOCAL_REPO=extra/ffmpeg
 
 LIBX264_REMOTE=https://github.com/yuqilin/libx264.git
@@ -63,7 +63,7 @@ function spopd() {
 
 function pull_fork() {
     ARCH=$1
-    
+
     echo "== pull ffmpeg fork $ARCH =="
     FFMPEG_ARCH_SRC=$FF_BUILD_ROOT/$ARCH/ffmpeg
     sh $TOOLS/pull-repo-ref.sh $FFMPEG_LOCAL_REPO $FFMPEG_REMOTE $FFMPEG_ARCH_SRC
@@ -92,7 +92,7 @@ function pull_fork() {
 
 FF_TOOLCHAIN_ARCH=arm
 for FF_ARCH in $BUILD_ARCHS; do
-    
+
     ##############################
     # make NDK standalone toolchain
     ##############################
@@ -131,10 +131,9 @@ for FF_ARCH in $BUILD_ARCHS; do
             $FF_MAKE_TOOLCHAIN_FLAGS \
             --platform=$FF_ANDROID_PLATFORM \
             --toolchain=$FF_TOOLCHAIN_NAME
-                
+
         touch $FF_TOOLCHAIN_TOUCH;
     fi
 
     pull_fork $FF_ARCH
 done
-
